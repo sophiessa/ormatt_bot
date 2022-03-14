@@ -18,12 +18,16 @@ async def choose_category_callback(callback_query: types.CallbackQuery):
     category = callback_query.data.replace('category ', '')
     products = await sqlite_db.read_products_raw()
     for product in products:
-        if category in product[5]:
-            await bot.send_photo(callback_query.from_user.id, product[1], f'{product[0]}', reply_markup=InlineKeyboardMarkup().row(InlineKeyboardButton(f'Оформить заказ', callback_data=f'choose {product[0]}'), InlineKeyboardButton('Написать консультанту', callback_data=f'text consultant')))
+        if category[9:] in product[5]:
+            await bot.send_photo(callback_query.from_user.id, product[1], f'{product[0]}', reply_markup=InlineKeyboardMarkup().row(InlineKeyboardButton(f'Оформить заказ', callback_data=f'choose {product[0]}'), InlineKeyboardButton('Написать консультанту', url='https://t.me/toktokozhoev')))
         await callback_query.answer()
 
 async def choose_product_callback(callback_query: types.CallbackQuery):
     await callback_query.message.answer(f"Вы выбрали {callback_query.data.replace('choose ', '')}, наши консультанты свяжутся с вами в ближайщее время!")
+    consultants = await sqlite_db.read_consultants()
+    for consultant in consultants:
+        await bot.send_message(chat_id=consultant[3], text=f"Здравствуйте, {consultant[1]}. {callback_query.from_user.full_name} хочет заказать  '{callback_query.data.replace('choose ', '')}'")
+
 
 async def go_to_website(message: types.Message):
     await message.answer('<a href=\'ormatt.kg\'>Посетить оффициальный сайт</a>', parse_mode=telegram.ParseMode.HTML)

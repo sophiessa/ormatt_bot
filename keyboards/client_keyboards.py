@@ -6,6 +6,12 @@ from aiogram.types import InlineKeyboardMarkup, ReplyKeyboardMarkup, KeyboardBut
 #local imports
 
 
+categories_btn = KeyboardButton('Посмотреть каталог матрасов')
+contact_manager_btn = KeyboardButton('Связаться с консультантом')
+move_to_website_btn = KeyboardButton('Посетить официальный сайт')
+client_keyboard_start = ReplyKeyboardMarkup(resize_keyboard=True).add(categories_btn).add(contact_manager_btn).add(move_to_website_btn)
+
+
 all_mattresses = InlineKeyboardButton('Все матрасы \U0001F30D', callback_data='category_all')
 big_discount_mattresses = InlineKeyboardButton('Матрасы со скидками \U0001F4B2', callback_data='category_dsc')
 cheap_mattresses = InlineKeyboardButton('Недорогие матрасы \U0001F495', callback_data='category_chp')

@@ -43,9 +43,14 @@ async def read_products_raw():
 
 #userdb
 async def add_user(user: User, table):
-    
     cur.execute(f"REPLACE INTO {table} VALUES (?, ?, ?, ?)", (user.username, user.full_name, user.phone_number, user.chat_id))
     base.commit()
+
+async def read_clients():
+    return cur.execute('SELECT * FROM clients').fetchall()
+
+async def read_consultants():
+    return cur.execute('SELECT * FROM consultants').fetchall()
 
 #utils 
 async def populate_db():
@@ -53,10 +58,4 @@ async def populate_db():
         await demo_add_product((f'namedschrd{i}', 'AgACAgIAAxkBAAIMj2IutwPjSP27vI2RQOU0WYnt6NmUAAJ_tzEb2QABeEm86LlZdRk4OQEAAwIAA3MAAyME', f'description{i}', i*1000, i*10, 'all, dsc, hrd'))
 
     for i in range(1, 5):
-        await demo_add_product((f'namesftkid{i}', 'AgACAgIAAxkBAAIMj2IutwPjSP27vI2RQOU0WYnt6NmUAAJ_tzEb2QABeEm86LlZdRk4OQEAAwIAA3MAAyME', f'description{i}', i*1000, i*10, 'all, sft, kid'))
-
-    for i in range(1, 5):
         await demo_add_product((f'nameacskid{i}', 'AgACAgIAAxkBAAIMj2IutwPjSP27vI2RQOU0WYnt6NmUAAJ_tzEb2QABeEm86LlZdRk4OQEAAwIAA3MAAyME', f'description{i}', i*1000, i*10, 'all, acs, hvy'))
-
-    for i in range(1, 5):
-        await demo_add_product((f'namechphrd{i}', 'AgACAgIAAxkBAAIMj2IutwPjSP27vI2RQOU0WYnt6NmUAAJ_tzEb2QABeEm86LlZdRk4OQEAAwIAA3MAAyME', f'description{i}', i*1000, i*10, 'all, chp, hrd'))

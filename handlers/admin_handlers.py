@@ -99,16 +99,18 @@ async def cancel_upload(message: types.Message, state: FSMContext):
 async def delete_product(message: types.Message):
     if message.from_user.username in admins:
         products = await sqlite_db.read_products_raw()
-        print(products)
-        for p in products:
-            await bot.send_photo(message.from_user.id, p[1], f'{p[0]}\nКатегории: {p[5]}', reply_markup=InlineKeyboardMarkup().add(InlineKeyboardButton(f'Удалить {p[0]}', callback_data=f'Delete {p[0]}')))
+        for product in products:
+            await bot.send_photo(message.from_user.id, product[1], f'{product[0]}\nКатегории: {product[5]}', reply_markup=InlineKeyboardMarkup().add(InlineKeyboardButton(f'Удалить {product[0]}', callback_data=f'Delete {product[0]}')))
 
 async def delete_callback_runner(callback_query: types.CallbackQuery):
     await sqlite_db.delete_product(callback_query.data.replace('Delete ', ''))
-    await callback_query.message.answer(text='', reply_markup=admin_keyboards.admin_keyboard_upload)
     await callback_query.answer(text=f"Вы успешно удалили {callback_query.data.replace('Delete ', '')}")
 
-
+async def show_clients(message: types.Message):
+    if message.from_user.username in admins:
+        clients = await sqlite_db.read_clients()
+        for i in range(len(clients)):
+            await message.answer(f"{i+1} -> Name: {clients[i][1]}, USERNAME: {clients[i][0]}")
 
 def register_admin_handlers(dp: Dispatcher):
     dp.register_message_handler(start_fsm, Text(equals='Загрузить'), state=None)
@@ -123,4 +125,6 @@ def register_admin_handlers(dp: Dispatcher):
     dp.register_message_handler(set_price, state=FSMAdmin.price)
     dp.register_message_handler(set_discount, state=FSMAdmin.discount)
     dp.register_message_handler(set_categories, state=FSMAdmin.categories)
+
+    dp.register_message_handler(show_clients, commands=['clients'])
 
