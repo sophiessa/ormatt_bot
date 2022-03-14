@@ -1,1 +1,1 @@
-from . import admin_keyboards
+from . import admin_keyboards, general_keyboards, client_keyboards

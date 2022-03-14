@@ -39,6 +39,6 @@ async def read_products_raw():
 
 #userdb
 async def add_user(user: User, table):
-    async with user.as_dict() as u:
-        cur.execute(f"INSERT INTO {table} VALUES {u['username'], u['full_name'], u['phone_number'], u['chat_id']}")
-        base.commit()
+    
+    cur.execute(f"REPLACE INTO {table} VALUES (?, ?, ?, ?)", (user.username, user.full_name, user.phone_number, user.chat_id))
+    base.commit()
