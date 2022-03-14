@@ -25,6 +25,10 @@ def start_database():
 
 
 #productdb
+async def demo_add_product(data):
+    cur.execute('INSERT INTO products VALUES (?, ?, ?, ?, ?, ?)', tuple(data))
+    base.commit()
+
 async def add_product(state):
     async with state.proxy() as data:
         cur.execute('INSERT INTO products VALUES (?, ?, ?, ?, ?, ?)', tuple(data.values()))
@@ -42,3 +46,17 @@ async def add_user(user: User, table):
     
     cur.execute(f"REPLACE INTO {table} VALUES (?, ?, ?, ?)", (user.username, user.full_name, user.phone_number, user.chat_id))
     base.commit()
+
+#utils 
+async def populate_db():
+    for i in range(1, 5):
+        await demo_add_product((f'namedschrd{i}', 'AgACAgIAAxkBAAIMj2IutwPjSP27vI2RQOU0WYnt6NmUAAJ_tzEb2QABeEm86LlZdRk4OQEAAwIAA3MAAyME', f'description{i}', i*1000, i*10, 'all, dsc, hrd'))
+
+    for i in range(1, 5):
+        await demo_add_product((f'namesftkid{i}', 'AgACAgIAAxkBAAIMj2IutwPjSP27vI2RQOU0WYnt6NmUAAJ_tzEb2QABeEm86LlZdRk4OQEAAwIAA3MAAyME', f'description{i}', i*1000, i*10, 'all, sft, kid'))
+
+    for i in range(1, 5):
+        await demo_add_product((f'nameacskid{i}', 'AgACAgIAAxkBAAIMj2IutwPjSP27vI2RQOU0WYnt6NmUAAJ_tzEb2QABeEm86LlZdRk4OQEAAwIAA3MAAyME', f'description{i}', i*1000, i*10, 'all, acs, hvy'))
+
+    for i in range(1, 5):
+        await demo_add_product((f'namechphrd{i}', 'AgACAgIAAxkBAAIMj2IutwPjSP27vI2RQOU0WYnt6NmUAAJ_tzEb2QABeEm86LlZdRk4OQEAAwIAA3MAAyME', f'description{i}', i*1000, i*10, 'all, chp, hrd'))
