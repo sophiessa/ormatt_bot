@@ -1,9 +1,9 @@
 #general imports 
-from distutils.command.upload import upload
 import dotenv, os, telegram
 
 #aiogram imports
 from aiogram import types, Dispatcher
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import Text
 from aiogram.dispatcher.filters.state import State, StatesGroup
@@ -11,6 +11,7 @@ from aiogram.dispatcher.filters.state import State, StatesGroup
 #local imports
 from keyboards import admin_keyboards
 from database import sqlite_db
+from start_bot import bot
 
 admins = os.getenv('ADMINS')
 
@@ -64,16 +65,16 @@ async def set_discount(message: types.Message, state: FSMContext):
             data['discount'] = message.text
         await FSMAdmin.next()
         await message.reply('''
-    <b>Выберите категорию</b>
-    <code>'all' - Все матрасы</code>
-    <code>'dsc' - Матрасы со скидками</code>
-    <code>'chp' - Недорогие матрасы</code>
-    <code>'hvy' - Для тяжёлых людей</code>
-    <code>'hrd' - Жёсткие матрасы</code>
-    <code>'sft' - Мягкие матрасы</code>
-    <code>'kid' - Детские матрасы</code>
-    <code>'acs' - Аксессуары</code>
-    <b>Перечислите все категории через запятую 'dsc, sft, acs'</b>
+<b>Выберите категорию</b>
+<code>'all' - Все матрасы</code>
+<code>'dsc' - Матрасы со скидками</code>
+<code>'chp' - Недорогие матрасы</code>
+<code>'hvy' - Для тяжёлых людей</code>
+<code>'hrd' - Жёсткие матрасы</code>
+<code>'sft' - Мягкие матрасы</code>
+<code>'kid' - Детские матрасы</code>
+<code>'acs' - Аксессуары</code>
+<b>Перечислите все категории через запятую 'dsc, sft, acs'</b>
         ''', parse_mode=telegram.ParseMode.HTML, reply_markup=admin_keyboards.admin_keyboard_cancel)
         
 async def set_categories(message: types.Message, state: FSMContext):
@@ -81,7 +82,7 @@ async def set_categories(message: types.Message, state: FSMContext):
         async with state.proxy() as data:
             data['categories'] = message.text
         await sqlite_db.add_product(state)
-        await message.reply('Продукт успешно добавлен в базу данных!', reply_markup=admin_keyboards.admin_keyboard_cancel)
+        await message.reply('Продукт успешно добавлен в базу данных!', reply_markup=admin_keyboards.admin_keyboard_upload)
         await state.finish()
 
 async def cancel_upload(message: types.Message, state: FSMContext):
@@ -94,10 +95,27 @@ async def cancel_upload(message: types.Message, state: FSMContext):
 #----------------------------------------------------------------------
 #End of the Finite State Machine
 
+#Deleting routine
+async def delete_product(message: types.Message):
+    if message.from_user.username in admins:
+        products = await sqlite_db.read_products_raw()
+        print(products)
+        for p in products:
+            await bot.send_photo(message.from_user.id, p[1], f'{p[0]}\nКатегории: {p[5]}', reply_markup=InlineKeyboardMarkup().add(InlineKeyboardButton(f'Удалить {p[0]}', callback_data=f'Delete {p[0]}')))
+
+async def delete_callback_runner(callback_query: types.CallbackQuery):
+    await sqlite_db.delete_product(callback_query.data.replace('Delete ', ''))
+    await callback_query.message.answer(text='', reply_markup=admin_keyboards.admin_keyboard_upload)
+    await callback_query.answer(text=f"Вы успешно удалили {callback_query.data.replace('Delete ', '')}")
+
+
 
 def register_admin_handlers(dp: Dispatcher):
     dp.register_message_handler(start_fsm, Text(equals='Загрузить'), state=None)
     dp.register_message_handler(cancel_upload, Text(equals='Отменить'), state='*')
+
+    dp.register_message_handler(delete_product, Text(equals='Удалить'))
+    dp.register_callback_query_handler(delete_callback_runner, Text(startswith='Delete'))
 
     dp.register_message_handler(set_name, state=FSMAdmin.name)
     dp.register_message_handler(set_photo, content_types=['photo'], state=FSMAdmin.photo)

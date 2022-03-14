@@ -23,11 +23,21 @@ def start_database():
     base.execute('CREATE TABLE IF NOT EXISTS consultants(username TEXT, full_name TEXT, phone_number TEXT, chat_id TEXT)')
     base.commit()
 
+
+#productdb
 async def add_product(state):
     async with state.proxy() as data:
         cur.execute('INSERT INTO products VALUES (?, ?, ?, ?, ?, ?)', tuple(data.values()))
         base.commit()
 
+async def delete_product(name):
+    cur.execute('DELETE FROM products WHERE name == ?', (name,))
+    base.commit()
+
+async def read_products_raw():
+    return cur.execute('SELECT * FROM products').fetchall()
+
+#userdb
 async def add_user(user: User, table):
     async with user.as_dict() as u:
         cur.execute(f"INSERT INTO {table} VALUES {u['username'], u['full_name'], u['phone_number'], u['chat_id']}")
