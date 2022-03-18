@@ -19,8 +19,8 @@ def start_database():
         print('Connected to the main.db')
     
     base.execute('CREATE TABLE IF NOT EXISTS products(name TEXT, photo TEXT, description TEXT, price TEXT, discount TEXT, categories TEXT)')
-    base.execute('CREATE TABLE IF NOT EXISTS clients(username TEXT, full_name TEXT, phone_number TEXT, chat_id TEXT)')
-    base.execute('CREATE TABLE IF NOT EXISTS consultants(username TEXT, full_name TEXT, phone_number TEXT, chat_id TEXT)')
+    base.execute('CREATE TABLE IF NOT EXISTS clients(username TEXT, full_name TEXT, phone_number TEXT, chat_id TEXT, UNIQUE (chat_id) ON CONFLICT REPLACE)')
+    base.execute('CREATE TABLE IF NOT EXISTS consultants(username TEXT, full_name TEXT, phone_number TEXT, chat_id TEXT, UNIQUE (chat_id) ON CONFLICT REPLACE)')
     base.commit()
 
 
