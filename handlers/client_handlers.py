@@ -1,4 +1,5 @@
 #general imports
+from math import prod
 import telegram
 
 #aiogram imports
@@ -15,11 +16,18 @@ async def see_catalog(message: types.Message):
     await message.answer('<b>Выберите категорию</b>', reply_markup=client_keyboards.mattresses_catalog, parse_mode=telegram.ParseMode.HTML)
 
 async def choose_category_callback(callback_query: types.CallbackQuery):
-    category = callback_query.data.replace('category ', '')
+    category = callback_query.data.replace('category_', '')
+    print(category)
     products = await sqlite_db.read_products_raw()
     for product in products:
-        if category[9:] in product[5]:
-            await bot.send_photo(callback_query.from_user.id, product[1], f'{product[0]}', reply_markup=InlineKeyboardMarkup().row(InlineKeyboardButton(f'Оформить заказ', callback_data=f'choose {product[0]}'), InlineKeyboardButton('Написать консультанту', url='https://t.me/toktokozhoev')))
+        if category in product[5]:
+            await bot.send_photo(callback_query.from_user.id, product[1], 
+            f'''
+<b>{product[0]}</b>
+Описание: {product[2]}
+Цена: <s>{product[3]}</s> {float(product[3]) * (100 - float(product[4])) / 100} сом
+            ''', 
+            reply_markup=InlineKeyboardMarkup().row(InlineKeyboardButton(f'Оформить заказ', callback_data=f'choose {product[0]}'), InlineKeyboardButton('Написать консультанту', url='https://t.me/toktokozhoev')), parse_mode=telegram.ParseMode.HTML)
         await callback_query.answer()
 
 async def choose_product_callback(callback_query: types.CallbackQuery):
