@@ -21,3 +21,9 @@ soft_mattresses = InlineKeyboardButton('Мягкие матрасы \U0001F607',
 kid_mattresses = InlineKeyboardButton('Детские матрасы \U0001F476', callback_data='category_kid')
 accessories = InlineKeyboardButton('Аксессуары \U0001F492', callback_data='category_acs')
 mattresses_catalog = InlineKeyboardMarkup().add(all_mattresses).add(big_discount_mattresses).add(cheap_mattresses).add(heavy_mattresses).add(hard_mattresses).add(soft_mattresses).add(kid_mattresses).add(accessories)
+
+website_link_button = InlineKeyboardButton('Перейти на сайт', url='https://www.ormatt.kg/')
+website_markup = InlineKeyboardMarkup().add(website_link_button)
+
+contact_link_button = InlineKeyboardButton('Написать консультанту', url='https://www.t.me/toktokozhoev')
+contact_markup = InlineKeyboardMarkup().add(contact_link_button)

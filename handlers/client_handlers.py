@@ -1,5 +1,4 @@
 #general imports
-from math import prod
 import telegram
 
 #aiogram imports
@@ -20,7 +19,7 @@ async def choose_category_callback(callback_query: types.CallbackQuery):
     print(category)
     products = await sqlite_db.read_products_raw()
     for product in products:
-        if category in product[5]:
+        if category in product[5].lower():
             await bot.send_photo(callback_query.from_user.id, product[1], 
             f'''
 <b>{product[0]}</b>
@@ -39,10 +38,10 @@ async def choose_product_callback(callback_query: types.CallbackQuery):
         """)
 
 async def go_to_website(message: types.Message):
-    await message.answer('<a href=\'ormatt.kg\'>Посетить оффициальный сайт</a>', parse_mode=telegram.ParseMode.HTML)
+    await message.answer('<b>Ниже ссылка на сайт</b>', parse_mode=telegram.ParseMode.HTML, reply_markup=client_keyboards.website_markup)
 
 async def contact_consultant(message: types.Message):
-    await message.answer('<a href=\'t.me/toktokozhoev\'>Связаться с консультантом</a>', parse_mode=telegram.ParseMode.HTML)
+    await message.answer('<b>Связаться с консультантом</b>', parse_mode=telegram.ParseMode.HTML, reply_markup=client_keyboards.contact_markup)
 
 def register_client_handlers(dp: Dispatcher):
     dp.register_message_handler(see_catalog, Text(equals='Посмотреть каталог матрасов'))
