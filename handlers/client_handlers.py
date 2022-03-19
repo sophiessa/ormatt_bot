@@ -34,8 +34,9 @@ async def choose_product_callback(callback_query: types.CallbackQuery):
     await callback_query.message.answer(f"Вы выбрали {callback_query.data.replace('choose ', '')}, наши консультанты свяжутся с вами в ближайщее время!")
     consultants = await sqlite_db.read_consultants()
     for consultant in consultants:
-        await bot.send_message(chat_id=consultant[3], text=f"Здравствуйте, {consultant[1]}. {callback_query.from_user.full_name} хочет заказать  '{callback_query.data.replace('choose ', '')}'")
-
+        await bot.send_message(chat_id=consultant[3], text=f"""
+        Здравствуйте, {consultant[1]}! \n{callback_query.from_user.first_name} хочет заказать  '{callback_query.data.replace('choose ', '')}' 
+        """)
 
 async def go_to_website(message: types.Message):
     await message.answer('<a href=\'ormatt.kg\'>Посетить оффициальный сайт</a>', parse_mode=telegram.ParseMode.HTML)
