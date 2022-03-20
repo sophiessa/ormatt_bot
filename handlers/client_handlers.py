@@ -30,7 +30,7 @@ async def choose_category_callback(callback_query: types.CallbackQuery):
         await callback_query.answer()
 
 async def choose_product_callback(callback_query: types.CallbackQuery):
-    await callback_query.message.answer(f"Вы выбрали {callback_query.data.replace('choose ', '')}, наши консультанты свяжутся с вами в ближайщее время!")
+    await callback_query.message.answer(f"Вы выбрали {callback_query.data.replace('choose ', '')}, наши консультанты свяжутся с вами в ближайщее время!!!")
     consultants = await sqlite_db.read_consultants()
     for consultant in consultants:
         await bot.send_message(chat_id=consultant[3], text=f"""
