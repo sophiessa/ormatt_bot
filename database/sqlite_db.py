@@ -51,11 +51,3 @@ async def read_clients():
 
 async def read_consultants():
     return cur.execute('SELECT * FROM consultants').fetchall()
-
-#utils 
-async def populate_db():
-    for i in range(1, 5):
-        await demo_add_product((f'namedschrd{i}', 'AgACAgIAAxkBAAIMj2IutwPjSP27vI2RQOU0WYnt6NmUAAJ_tzEb2QABeEm86LlZdRk4OQEAAwIAA3MAAyME', f'description{i}', i*1000, i*10, 'all, dsc, hrd'))
-
-    for i in range(1, 5):
-        await demo_add_product((f'nameacskid{i}', 'AgACAgIAAxkBAAIMj2IutwPjSP27vI2RQOU0WYnt6NmUAAJ_tzEb2QABeEm86LlZdRk4OQEAAwIAA3MAAyME', f'description{i}', i*1000, i*10, 'all, acs, hvy'))
