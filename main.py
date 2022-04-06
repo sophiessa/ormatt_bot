@@ -11,11 +11,13 @@ from database import sqlite_db
 
 
 async def on_startup(_):
-    sqlite_db.start_database()
+    sqlite_db.start_products_database()
+    sqlite_db.start_users_database()
+    sqlite_db.start_reviews_database()
     print('ormatt_bot is up........')
 
 async def on_shutdown(_):
-    bot.close()
+    await bot.close()
 
 
 

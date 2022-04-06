@@ -2,7 +2,7 @@
 import dotenv, os
 
 #aiogram imports 
-from aiogram import Bot
+from aiogram import Bot, types
 from aiogram.dispatcher import Dispatcher
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
@@ -12,5 +12,5 @@ token   = os.getenv('TOKEN')
 storage = MemoryStorage()
 
 
-bot = Bot(token=token)
+bot = Bot(token=token, parse_mode=types.ParseMode.HTML)
 dp  = Dispatcher(bot, storage=storage)

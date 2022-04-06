@@ -9,7 +9,7 @@ from aiogram.dispatcher.filters import Text
 from aiogram.dispatcher.filters.state import State, StatesGroup
 
 #local imports
-from keyboards import admin_keyboards
+from keyboards import admin_keyboards as akbs
 from database import sqlite_db
 from start_bot import bot
 
@@ -29,35 +29,35 @@ class FSMAdmin(StatesGroup):
 async def start_fsm(message: types.Message):
     if message.from_user.username in admins:
         await FSMAdmin.name.set()
-        await message.answer('Как называется матрас(аксессуар)?', reply_markup=admin_keyboards.admin_keyboard_cancel)
+        await message.answer('Как называется матрас(аксессуар)?', reply_markup=akbs.upload_delete_markup(message.from_user.language_code))
 
 async def set_name(message: types.Message, state: FSMContext):
     if message.from_user.username in admins:
         async with state.proxy() as data: 
             data['name'] = message.text
         await FSMAdmin.next()
-        await message.reply('Теперь загрузите фотографию!', reply_markup=admin_keyboards.admin_keyboard_cancel)
+        await message.reply('Теперь загрузите фотографию!')
 
 async def set_photo(message: types.Message, state: FSMContext):
     if message.from_user.username in admins:
         async with state.proxy() as data:
             data['photo'] = message.photo[0].file_id
         await FSMAdmin.next()
-        await message.reply('Теперь напишите описание!', reply_markup=admin_keyboards.admin_keyboard_cancel)
+        await message.reply('Теперь напишите описание!')
 
 async def set_description(message: types.Message, state: FSMContext):
     if message.from_user.username in admins:
         async with state.proxy() as data:
             data['description'] = message.text
         await FSMAdmin.next()
-        await message.reply('Теперь укажите цену без скидки!', reply_markup=admin_keyboards.admin_keyboard_cancel)
+        await message.reply('Теперь укажите цену без скидки!')
 
 async def set_price(message: types.Message, state: FSMContext):
     if message.from_user.username in admins:
         async with state.proxy() as data:
             data['price'] = message.text
         await FSMAdmin.next()
-        await message.reply('Теперь укажите скидку!', reply_markup=admin_keyboards.admin_keyboard_cancel)
+        await message.reply('Теперь укажите скидку!')
 
 async def set_discount(message: types.Message, state: FSMContext):
     if message.from_user.username in admins:
@@ -75,14 +75,14 @@ async def set_discount(message: types.Message, state: FSMContext):
 <code>'kid' - Детские матрасы</code>
 <code>'acs' - Аксессуары</code>
 <b>Перечислите все категории через запятую 'dsc, sft, acs'</b>
-        ''', parse_mode=telegram.ParseMode.HTML, reply_markup=admin_keyboards.admin_keyboard_cancel)
+        ''')
         
 async def set_categories(message: types.Message, state: FSMContext):
     if message.from_user.username in admins:
         async with state.proxy() as data:
             data['categories'] = message.text
-        await sqlite_db.add_product(state)
-        await message.reply('Продукт успешно добавлен в базу данных!', reply_markup=admin_keyboards.admin_keyboard_upload)
+        await sqlite_db.add_a_product(state)
+        await message.reply('Продукт успешно добавлен в базу данных!')
         await state.finish()
 
 async def cancel_upload(message: types.Message, state: FSMContext):
@@ -91,7 +91,7 @@ async def cancel_upload(message: types.Message, state: FSMContext):
         if curr_state is None:
             return
         await state.finish()
-        await message.reply('Загрузка успешно отменена!', reply_markup=admin_keyboards.admin_keyboard_upload)
+        await message.reply('Загрузка успешно отменена!')
 #----------------------------------------------------------------------
 #End of the Finite State Machine
 
@@ -113,7 +113,7 @@ async def show_clients(message: types.Message):
             await message.answer(f"{i+1} -> Name: {clients[i][1]}, USERNAME: {clients[i][0]}")
 
 def register_admin_handlers(dp: Dispatcher):
-    dp.register_message_handler(start_fsm, Text(equals='Загрузить'), state=None)
+    dp.register_message_handler(start_fsm, Text(equals='Upload'), state=None)
     dp.register_message_handler(cancel_upload, Text(equals='Отменить'), state='*')
 
     dp.register_message_handler(delete_product, Text(equals='Удалить'))

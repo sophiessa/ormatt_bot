@@ -1,10 +1,28 @@
+#aiogram imports
 from aiogram.types import KeyboardButton, ReplyKeyboardMarkup
 
-upload_btn = KeyboardButton('Загрузить')
-cancel_btn = KeyboardButton('Отменить')
-delete_btn = KeyboardButton('Удалить')
 
-join_btn   = KeyboardButton('Добавиться к консультантам')
+# admin_keyboard_cancel = ReplyKeyboardMarkup(resize_keyboard=True).add(cancel_btn)
+def upload_delete_markup(lang: str):
+    upload_btn = {
+        'ru': KeyboardButton('Загрузить'),
+        'en': KeyboardButton('Upload'),
+        'kg': KeyboardButton('Жуктоо'),
+    }
+    cancel_btn = {
+        'ru': KeyboardButton('Отменить'),
+        'en': KeyboardButton('Cancel'),
+        'kg': KeyboardButton('Жокко чыгаруу'),
+    }
+    delete_btn = {
+        'ru': KeyboardButton('Удалить'),
+        'en': KeyboardButton('Delete'),
+        'kg': KeyboardButton('Жок кылуу'),
+    }
 
-admin_keyboard_cancel = ReplyKeyboardMarkup(resize_keyboard=True).add(cancel_btn)
-admin_keyboard_upload = ReplyKeyboardMarkup(resize_keyboard=True).row(upload_btn, delete_btn)
+    join_btn = {
+        'ru': KeyboardButton('Добавиться к консультантам'),
+        'en': KeyboardButton('Join consultants'),
+        'kg': KeyboardButton('Добавиться к консультантам'),
+    }
+    return ReplyKeyboardMarkup(resize_keyboard=True).add(upload_btn[lang], delete_btn[lang])
