@@ -73,7 +73,7 @@ async def read_products_raw():
 
 #users.db
 async def add_a_user(user: User):
-    cur_user.execute(f'INSERT INTO users VALUES (?, ?, ?, ?, ?, ?, ?)', (user.chat_id, user.username, user.full_name, user.phone_number, user.is_admin, user.language_code, user.recieve_notifications))
+    cur_user.execute(f'REPLACE INTO users VALUES (?, ?, ?, ?, ?, ?, ?)', (user.chat_id, user.username, user.full_name, user.phone_number, user.is_admin, user.language_code, user.recieve_notifications))
     base_user.commit()
 
 async def delete_a_user(chat_id):
