@@ -177,7 +177,7 @@ class AdminTexts():
     def upload_product_discount(lang='ru'):
         return {
             'ru': 'Теперь укажите скидку!',
-            'en': 'Set the price now!',
+            'en': 'Set the discount now!',
             'kg': 'Арзандатуусу канча?'
         }[lang]
 
@@ -205,7 +205,7 @@ class AdminTexts():
 <code>'sft' - Soft mattresses</code>
 <code>'kid' - Kid mattresses</code>
 <code>'acs' - Accessories</code>
-<b>Перечислите все категории через запятую 'dsc, sft, acs'</b>
+<b>List all the categories separated by commas 'dsc, sft, acs'</b>
         ''',
         'kg': '''
 <b>Категория танданыз</b>
@@ -217,7 +217,7 @@ class AdminTexts():
 <code>'sft' - Жумшак матрацтар</code>
 <code>'kid' - Балдар үчүн матрацтар</code>
 <code>'acs' - Аксессуарлар</code>
-<b>Перечислите все категории через запятую 'dsc, sft, acs'</b>
+<b>Утур менен болуп жазыныз 'dsc, sft, acs'</b>
         ''',
         }[lang]
 
