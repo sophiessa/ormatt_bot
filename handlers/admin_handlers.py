@@ -110,9 +110,9 @@ async def set_categories(message: types.Message, state: FSMContext):
         async with state.proxy() as data:
             data['categories'] = message.text
         await sqlite_db.add_a_product(state)
-        cancel_keyboard = akbs.cancel_keyboard_markup(lang)
+        general_keyboard = akbs.start_keyboard_markup(lang)
         text = ats.upload_product_success(lang)
-        await message.reply(text=text, reply_markup=cancel_keyboard)
+        await message.reply(text=text, reply_markup=general_keyboard)
         await state.finish()
 
 async def cancel_upload(message: types.Message, state: FSMContext):
