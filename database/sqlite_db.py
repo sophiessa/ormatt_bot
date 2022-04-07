@@ -46,6 +46,18 @@ def start_reviews_database():
     base_review.execute('CREATE TABLE IF NOT EXISTS reviews (user TEXT, user_id INTEGET, date TEXT, review TEXT)')
     base_review.commit()
 
+# def start_posts_database():
+#     global base_post, cur_post
+
+#     base_post = sqlite3.connect('database/posts.db')
+#     cur_post  = base_post.cursor()
+
+#     if base_post:
+#         print('connected to the posts.db...........')
+
+#     base_post.execute('CREATE TABLE IF NOT EXISTS posts (user TEXT, date TEXT, text TEXT)')
+#     base_post.commit()
+
 #products.db
 async def add_a_product(state):
     async with state.proxy() as data:
@@ -96,5 +108,6 @@ async def add_a_review(state):
 
 async def see_reviews():
     return cur_review.execute('SELECT * FROM reviews').fetchall()
+
 
 #TODO look into databases, put something else instead of PRIMARY KEY

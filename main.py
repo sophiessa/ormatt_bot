@@ -25,4 +25,5 @@ admin_handlers.register_admin_handlers(dp)
 general_handlers.register_general_handlers(dp)
 client_handlers.register_client_handlers(dp)
 
+
 ex.start_polling(dp, on_startup=on_startup, on_shutdown=on_shutdown)

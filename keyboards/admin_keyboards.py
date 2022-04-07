@@ -7,7 +7,7 @@ def upload_delete_markup(lang: str):
     upload_btn = {
         'ru': KeyboardButton('Загрузить'),
         'en': KeyboardButton('Upload'),
-        'kg': KeyboardButton('Жуктоо'),
+        'kg': KeyboardButton('Жүктөө'),
     }
     cancel_btn = {
         'ru': KeyboardButton('Отменить'),
@@ -23,6 +23,6 @@ def upload_delete_markup(lang: str):
     join_btn = {
         'ru': KeyboardButton('Добавиться к консультантам'),
         'en': KeyboardButton('Join consultants'),
-        'kg': KeyboardButton('Добавиться к консультантам'),
+        'kg': KeyboardButton('Менеджерлерге кошулуу'),
     }
     return ReplyKeyboardMarkup(resize_keyboard=True).add(upload_btn[lang], delete_btn[lang])
