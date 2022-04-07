@@ -83,6 +83,9 @@ async def delete_a_user(chat_id):
 async def read_a_user(chat_id):
     return cur_user.execute(f'SELECT * FROM users WHERE chat_id == {chat_id}').fetchall()
 
+async def read_admins():
+    return cur_user.execute(f'SELECT * FROM users WHERE is_admin == 1').fetchall()
+
 async def update_language(chat_id, new_language):
     cur_user.execute(f'UPDATE users SET language_code = "{new_language}" WHERE chat_id == {chat_id}')
     base_user.commit()

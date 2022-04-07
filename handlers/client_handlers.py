@@ -13,7 +13,7 @@ from start_bot import dp, bot
 from keyboards import client_keyboards as ckbs
 from database import sqlite_db
 from utils.classes import User
-from texts.text import ClientTexts as cts
+from texts.text import ClientTexts as cts, AdminTexts as ats
 
 #load .env
 dotenv.load_dotenv()
@@ -111,12 +111,17 @@ async def set_buyer_name(message: types.Message, state: FSMContext):
 async def set_buyer_phone_number(message: types.Message, state: FSMContext):
     user = await sqlite_db.read_a_user(message.from_user.id)
     lang = message.from_user.language_code if user == None else user[0][5]
-    
+
     product_name = ''
     async with state.proxy() as data:
         data['phone_number'] = message.text
         await sqlite_db.update_phone_number(user[0][0], message.text)
+        admins = await sqlite_db.read_admins()
         product_name = data['choice']
+        for admin in admins:
+            lang_a = admin[5]
+            text = ats.order(user[0][1], data['full_name'], data['phone_number'], data['choice'], lang_a)
+            await bot.send_message(chat_id=admin[0], text=text)
 
     text = cts.chosen_product(product_name, lang)
     start_keyboard = ckbs.start_markup(lang)
@@ -207,16 +212,15 @@ async def see_reviews(message: types.Message):
 
 
 async def change_language(message: types.Message):
-    text = cts.change_language()
     change_language_inline_keyboard = ckbs.change_language_inline_keyboard()
     await message.answer(text='Выберите язык!\nСhoose a language!\nТил танданыз!', reply_markup=change_language_inline_keyboard)
 
 async def change_language_callback(callback_query: types.CallbackQuery):
-       lang = callback_query.data.replace('language_', '')
-       text = cts.change_language(lang)
-       await sqlite_db.update_language(callback_query.from_user.id, lang)
-       await callback_query.message.answer(text=text, reply_markup=ckbs.start_markup(lang))
-       await callback_query.answer()
+    lang = callback_query.data.replace('language_', '')
+    text = cts.change_language(lang)
+    await sqlite_db.update_language(callback_query.from_user.id, lang)
+    await callback_query.message.answer(text=text, reply_markup=ckbs.start_markup(lang))
+    await callback_query.answer()
 
 async def receive_notifications(message: types.Message):
     user = await sqlite_db.read_a_user(message.from_user.id)

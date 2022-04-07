@@ -138,5 +138,123 @@ class ClientTexts():
             }[lang]
 
 
+class AdminTexts():
+    def order(username:str, full_name: str, phone_number: str, product: str, lang='ru'):
+        return {
+            'ru': f'<b>Новый заказ от {username}</b>\nИмя: {full_name}\nТелефон: {phone_number}\nТовар: {product}',
+            'en': f'<b>New order from {username}</b>\nName: {full_name}\nPhone Number: {phone_number}\nProduct: {product}',
+            'kg': f'<b>New Заказ {username}</b>\nАты: {full_name}\nТелефону: {phone_number}\nТовар: {product}',
+        }[lang]
+    
+    def upload_product_name(lang='ru'):
+        return {
+            'ru': 'Как называется матрас(аксессуар)?',
+            'en': 'What is the name of the product?',
+            'kg': 'Товардын атын жазыңыз',
+        }[lang]
+    
+    def upload_product_photo(lang='ru'):
+        return {
+            'ru': 'Теперь загрузите фотографию товара!',
+            'en': 'Upload the picture of the product!',
+            'kg': 'Эми товардын сүрөтүн жүктөнүз!',
+        }[lang]
+    
+    def upload_product_description(lang='ru'):
+        return {
+            'ru': 'Теперь напишите описание!',
+            'en': 'Write down a description!',
+            'kg': 'Сурөттөмө жазыныз!',
+        }[lang]
 
-            
+    def upload_product_price(lang='ru'):
+        return {
+            'ru': 'Теперь укажите цену без скидки!',
+            'en': 'What is the price of this product!',
+            'kg': 'Баасы канча?'
+        }[lang]
+
+    def upload_product_discount(lang='ru'):
+        return {
+            'ru': 'Теперь укажите скидку!',
+            'en': 'Set the price now!',
+            'kg': 'Арзандатуусу канча?'
+        }[lang]
+
+    def upload_product_category(lang='ru'):
+        return {
+            'ru': '''
+<b>Выберите категорию</b>
+<code>'all' - Все матрасы</code>
+<code>'dsc' - Матрасы со скидками</code>
+<code>'chp' - Недорогие матрасы</code>
+<code>'hvy' - Для тяжёлых людей</code>
+<code>'hrd' - Жёсткие матрасы</code>
+<code>'sft' - Мягкие матрасы</code>
+<code>'kid' - Детские матрасы</code>
+<code>'acs' - Аксессуары</code>
+<b>Перечислите все категории через запятую 'dsc, sft, acs'</b>
+        ''',
+        'en': '''
+<b>Choose categories</b>
+<code>'all' - All the mattresses</code>
+<code>'dsc' - Discounted mattresses</code>
+<code>'chp' - Inexpensive mattresses</code>
+<code>'hvy' - For heavy people</code>
+<code>'hrd' - Hard mattresses</code>
+<code>'sft' - Soft mattresses</code>
+<code>'kid' - Kid mattresses</code>
+<code>'acs' - Accessories</code>
+<b>Перечислите все категории через запятую 'dsc, sft, acs'</b>
+        ''',
+        'kg': '''
+<b>Категория танданыз</b>
+<code>'all' - Бардык матрацтар</code>
+<code>'dsc' - Арзандатуулар менен матрацтар</code>
+<code>'chp' - Арзан матрацтар</code>
+<code>'hvy' - Оор адамдар үчүн</code>
+<code>'hrd' - Катуу матрацтар</code>
+<code>'sft' - Жумшак матрацтар</code>
+<code>'kid' - Балдар үчүн матрацтар</code>
+<code>'acs' - Аксессуарлар</code>
+<b>Перечислите все категории через запятую 'dsc, sft, acs'</b>
+        ''',
+        }[lang]
+
+    def upload_product_success(lang='ru'):
+        return {
+            'ru': 'Продукт успешно добавлен в базу данных!',
+            'en': 'The product is added to the database!',
+            'kg': 'Базага кошулду!'
+        }[lang]
+    
+    def upload_product_cancel(lang='ru'):
+        return {
+            'ru': 'Загрузка успешно отменена!',
+            'en': 'Upload is canceled!',
+            'kg': 'Жокко чыкты!'
+        }[lang]
+
+    def delete_product(product_name, product_category, lang='ru'):
+        return {
+            'ru': f'{product_name}\nКатегории: {product_category}',
+            'en': f'{product_name}\nCategories: {product_category}',
+            'kg': f'{product_name}\nКатегорялар: {product_category}',
+        }[lang]
+    
+    def delete_product_callback(product_name, lang='ru'):
+        return {
+            'ru': f"Вы успешно удалили {product_name}",
+            'en': f'You successfuly deleted {product_name}',
+            'kg': f'{product_name} өчүрдүнүз',
+        }[lang]
+
+
+    def change_language(lang='ru'):
+        return {
+            'ru': 'Язык поменялся на Русский!',
+            'en': 'The language is English now!',
+            'kg': 'Кыргыз тилине которулду!',
+        }[lang]
+
+
