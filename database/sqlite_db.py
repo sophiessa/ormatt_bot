@@ -31,7 +31,7 @@ def start_users_database():
     if base_user:
         print('connected to the users.db...........')
     
-    base_user.execute('CREATE TABLE IF NOT EXISTS users (chat_id INTEGER, username TEXT, full_name TEXT, phone_number TEXT, is_admin TEXT, language_code TEXT, receive_notifications INTEGER)')
+    base_user.execute('CREATE TABLE IF NOT EXISTS users (chat_id INTEGER, username TEXT, full_name TEXT, phone_number TEXT, is_admin TEXT, language_code TEXT, receive_notifications INTEGER, UNIQUE (chat_id) ON CONFLICT REPLACE)')
     base_user.commit()
 
 def start_reviews_database():
