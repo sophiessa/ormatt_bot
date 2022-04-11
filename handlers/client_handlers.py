@@ -10,7 +10,7 @@ from aiogram.dispatcher.filters.state import State, StatesGroup
 
 #local imports
 from start_bot import dp, bot
-from keyboards import client_keyboards as ckbs
+from keyboards import client_keyboards as ckbs, general_keyboards as gkbs
 from database import sqlite_db
 from utils.classes import User
 from texts.text import ClientTexts as cts, AdminTexts as ats
@@ -46,7 +46,12 @@ user
 #Display all the mattress categories
 async def see_mattresses(message: types.Message):
     user = await sqlite_db.read_a_user(message.from_user.id)
-    lang = message.from_user.language_code if user == None else user[0][5]
+    #CHANGE
+    if user == None or user == []:
+        await message.answer('/start', reply_markup=gkbs.start_button())
+        return
+    #CHANGE
+    lang = message.from_user.language_code if user == None or user == [] else user[0][5]
     text = cts.see_mattress_category(lang)
     mat_cat_kb = ckbs.mattresses_catalog(lang)
     await message.answer(text=text, reply_markup=mat_cat_kb)
@@ -56,7 +61,12 @@ async def choose_category_callback(callback_query: types.CallbackQuery):
     category = callback_query.data.replace('category_', '')
     products = await sqlite_db.read_products_raw()
     user = await sqlite_db.read_a_user(callback_query.from_user.id)
-    lang = callback_query.from_user.language_code if user == None else user[0][5]
+    #CHANGE
+    if user == None or user == []:
+        await callback_query.message.answer('/start', reply_markup=gkbs.start_button())
+        return
+    #CHANGE
+    lang = callback_query.from_user.language_code if user == None or user == [] else user[0][5]
     for product in products:
         categories = product[5].lower()
         if category in categories:
@@ -70,7 +80,12 @@ async def see_accessories(message: types.Message):
     category = 'acs'
     products = await sqlite_db.read_products_raw()
     user = await sqlite_db.read_a_user(message.from_user.id)
-    lang = message.from_user.language_code if user == None else user[0][5]
+    #CHANGE
+    if user == None or user == []:
+        await message.answer('/start', reply_markup=gkbs.start_button())
+        return
+    #CHANGE
+    lang = message.from_user.language_code if user == None or user == [] else user[0][5]
     for product in products:
         categories = product[5].lower()
         if category in categories:
@@ -82,7 +97,12 @@ async def see_accessories(message: types.Message):
 #BUY PRODUCT FST START
 async def choose_product_callback(callback_query: types.CallbackQuery, state: FSMContext):
     user = await sqlite_db.read_a_user(callback_query.from_user.id)
-    lang = callback_query.from_user.language_code if user == None else user[0][5]
+    #CHANGE
+    if user == None or user == []:
+        await callback_query.message.answer('/start', reply_markup=gkbs.start_button())
+        return
+    #CHANGE
+    lang = callback_query.from_user.language_code if user == None or user == [] else user[0][5]
     product_name = callback_query.data.replace('choose_', '')
     text = cts.question_buyer_name(lang)
     cancel_buy_keyboard = ckbs.cancel_buy_markup(lang)
@@ -97,7 +117,12 @@ async def choose_product_callback(callback_query: types.CallbackQuery, state: FS
 
 async def set_buyer_name(message: types.Message, state: FSMContext):
     user = await sqlite_db.read_a_user(message.from_user.id)
-    lang = message.from_user.language_code if user == None else user[0][5]
+    #CHANGE
+    if user == None or user == []:
+        await message.answer('/start', reply_markup=gkbs.start_button())
+        return
+    #CHANGE
+    lang = message.from_user.language_code if user == None or user == [] else user[0][5]
     text = cts.question_buyer_phone_number(lang)
     # phone_number_buy_keyboard = ckbs.phone_number_buy_markup(lang)
     cancel_buy_keyboard = ckbs.cancel_buy_markup(lang)
@@ -110,7 +135,12 @@ async def set_buyer_name(message: types.Message, state: FSMContext):
 
 async def set_buyer_phone_number(message: types.Message, state: FSMContext):
     user = await sqlite_db.read_a_user(message.from_user.id)
-    lang = message.from_user.language_code if user == None else user[0][5]
+    #CHANGE
+    if user == None or user == []:
+        await message.answer('/start', reply_markup=gkbs.start_button())
+        return
+    #CHANGE
+    lang = message.from_user.language_code if user == None or user == [] else user[0][5]
 
     product_name = ''
     async with state.proxy() as data:
@@ -130,7 +160,12 @@ async def set_buyer_phone_number(message: types.Message, state: FSMContext):
 
 async def cancel_buy(message: types.Message, state: FSMContext):
     user = await sqlite_db.read_a_user(message.from_user.id)
-    lang = message.from_user.language_code if user == None else user[0][5]
+    #CHANGE
+    if user == None or user == []:
+        await message.answer('/start', reply_markup=gkbs.start_button())
+        return
+    #CHANGE
+    lang = message.from_user.language_code if user == None or user == [] else user[0][5]
     text = cts.cancel_buy(lang)
     start_keyboard = ckbs.start_markup(lang)
 
@@ -145,7 +180,12 @@ async def cancel_buy(message: types.Message, state: FSMContext):
 
 async def about_us(message: types.Message):
     user = await sqlite_db.read_a_user(message.from_user.id)
-    lang = message.from_user.language_code if user == None else user[0][5]
+    #CHANGE
+    if user == None or user == []:
+        await message.answer('/start', reply_markup=gkbs.start_button())
+        return
+    #CHANGE
+    lang = message.from_user.language_code if user == None or user == [] else user[0][5]
     text = cts.about_us(lang)
     website_link = ckbs.website_inline_keyboard(lang)
     await message.answer(text=text, reply_markup=website_link)
@@ -153,7 +193,12 @@ async def about_us(message: types.Message):
 
 async def our_social_media(message: types.Message):
     user = await sqlite_db.read_a_user(message.from_user.id)
-    lang = message.from_user.language_code if user == None else user[0][5]
+    #CHANGE
+    if user == None or user == []:
+        await message.answer('/start', reply_markup=gkbs.start_button())
+        return
+    #CHANGE
+    lang = message.from_user.language_code if user == None or user == [] else user[0][5]
     text = cts.social_media(lang)
     social_media = ckbs.social_media_inline_keyboard(lang)
     await message.answer(text=text, reply_markup=social_media)
@@ -161,7 +206,12 @@ async def our_social_media(message: types.Message):
 #'Leave a review' FSM beginning
 async def leave_a_review_start(message: types.Message):
     user = await sqlite_db.read_a_user(message.from_user.id)
-    lang = message.from_user.language_code if user == None else user[0][5]
+    #CHANGE
+    if user == None or user == []:
+        await message.answer('/start', reply_markup=gkbs.start_button())
+        return
+    #CHANGE
+    lang = message.from_user.language_code if user == None or user == [] else user[0][5]
     text = cts.review_question_name(lang)
     cancel_keyboard = ckbs.leave_a_review_cancel(lang)
     await FSMReview.user.set()
@@ -169,7 +219,12 @@ async def leave_a_review_start(message: types.Message):
 #set states one by one, skip (id, date)
 async def set_review_user(message: types.Message, state: FSMContext):
     user = await sqlite_db.read_a_user(message.from_user.id)
-    lang = message.from_user.language_code if user == None else user[0][5]
+    #CHANGE
+    if user == None or user == []:
+        await message.answer('/start', reply_markup=gkbs.start_button())
+        return
+    #CHANGE
+    lang = message.from_user.language_code if user == None or user == [] else user[0][5]
     text = cts.review_question_review(lang)
     cancel_keyboard = ckbs.leave_a_review_cancel(lang)
     async with state.proxy() as data:
@@ -184,7 +239,12 @@ async def set_review_user(message: types.Message, state: FSMContext):
 
 async def set_review_review(message: types.Message, state: FSMContext):
     user = await sqlite_db.read_a_user(message.from_user.id)
-    lang = message.from_user.language_code if user == None else user[0][5]
+    #CHANGE
+    if user == None or user == []:
+        await message.answer('/start', reply_markup=gkbs.start_button())
+        return
+    #CHANGE
+    lang = message.from_user.language_code if user == None or user == [] else user[0][5]
     text = cts.review_end(lang)
     start_keyboard = ckbs.start_markup(lang)
     async with state.proxy() as data:
@@ -195,7 +255,12 @@ async def set_review_review(message: types.Message, state: FSMContext):
 #cancel review if needed
 async def cancel_review(message: types.Message, state: FSMContext):
     user = await sqlite_db.read_a_user(message.from_user.id)
-    lang = message.from_user.language_code if user == None else user[0][5]
+    #CHANGE
+    if user == None or user == []:
+        await message.answer('/start', reply_markup=gkbs.start_button())
+        return
+    #CHANGE
+    lang = message.from_user.language_code if user == None or user == [] else user[0][5]
     text = cts.review_cancel(lang)
     start_keyboard = ckbs.start_markup(lang)
     curr_state = await state.get_state()
@@ -224,14 +289,24 @@ async def change_language_callback(callback_query: types.CallbackQuery):
 
 async def receive_notifications(message: types.Message):
     user = await sqlite_db.read_a_user(message.from_user.id)
-    lang = message.from_user.language_code if user == None else user[0][5]
+    #CHANGE
+    if user == None or user == []:
+        await message.answer('/start', reply_markup=gkbs.start_button())
+        return
+    #CHANGE
+    lang = message.from_user.language_code if user == None or user == [] else user[0][5]
     text = cts.receive_notifications(lang)
     receive_yes_no_keyboard = ckbs.receive_notifications_yes_not_markup(lang)
     await message.answer(text=text, reply_markup=receive_yes_no_keyboard)
 
 async def receive_notifications_callback(callback_query: types.CallbackQuery):
     user = await sqlite_db.read_a_user(callback_query.from_user.id)
-    lang = callback_query.from_user.language_code if user == None else user[0][5]
+    #CHANGE
+    if user == None or user == []:
+        await callback_query.message.answer('/start', reply_markup=gkbs.start_button())
+        return
+    #CHANGE
+    lang = callback_query.from_user.language_code if user == None or user == [] else user[0][5]
     receive = callback_query.data.replace('receive_notifications_', '')
     text = cts.receive_notification_yes_no(receive, lang)
     start_keyboard = ckbs.start_markup(lang)
