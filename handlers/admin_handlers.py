@@ -25,6 +25,10 @@ class FSMAdmin(StatesGroup):
     discount    = State()
     categories  = State()
 
+class FSMPost(StatesGroup):
+    title = State()
+    text  = State()
+
 """
 user
 0 - chat_id
@@ -158,9 +162,36 @@ async def delete_callback_runner(callback_query: types.CallbackQuery):
     text = ats.delete_product_callback(callback_query.data.replace('Delete ', ''), lang)
     await callback_query.message.answer(text=text)
 
-
+#Start posting fsm
 async def post_notification(message: types.Message):
-    await message.answer('Coming soon.....')
+    user = await sqlite_db.read_a_user(message)
+
+    lang = message.from_user.language_code if user == None or user == [] else user[0][5]
+    if int(user[0][4]):
+        await FSMPost.title.set()
+        await message.answer('Title')
+
+async def set_title(message: types.Message, state: FSMContext):
+    user = await sqlite_db.read_a_user(message)
+
+    lang = message.from_user.language_code if user == None or user == [] else user[0][5]
+    if int(user[0][4]):
+        async with state.proxy() as data:
+            data['title'] = message.text
+        await FSMPost.next()
+        await message.answer('Text')
+
+async def set_text(message: types.Message, state: FSMContext):
+    user = await sqlite_db.read_a_user(message)
+    users = await sqlite_db.read_users()
+    lang = message.from_user.language_code if user == None or user == [] else user[0][5]
+    if int(user[0][4]):
+        async with state.proxy() as data:
+            for u in users:
+                await bot.send_message(chat_id=u[0], text=f"<b>{data['title']}</b>\n{message.text}")
+            
+    await state.finish()
+    await message.answer('DONE!')
 
 
 async def change_language(message: types.Message):
@@ -194,7 +225,9 @@ def register_admin_handlers(dp: Dispatcher):
     dp.register_message_handler(set_discount, state=FSMAdmin.discount)
     dp.register_message_handler(set_categories, state=FSMAdmin.categories)
 
-    dp.register_message_handler(post_notification, Text(contains='\U00002709'))
+    dp.register_message_handler(post_notification, Text(contains='\U00002709'), state=None)
+    dp.register_message_handler(set_title, state=FSMPost.title)
+    dp.register_message_handler(set_text, state=FSMPost.text)
     dp.register_message_handler(change_language, Text(contains='\U00003297'))
     dp.register_callback_query_handler(change_language_callback, Text(startswith='Alanguage_'))
 
