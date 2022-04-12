@@ -1,5 +1,5 @@
 #general imports 
-import sqlite3
+import sqlite3, dotenv, os
 
 #aiogram imports
 from aiogram import types
@@ -7,6 +7,10 @@ from aiogram import types
 #local imports
 from start_bot import bot
 from utils.classes import User
+
+
+dotenv.load_dotenv()
+admins = os.getenv('ADMINS')
 
 
 def start_products_database():
@@ -80,11 +84,30 @@ async def delete_a_user(chat_id):
     cur_user.execute(f'DELETE FROM users WHERE chat_id == {chat_id}').fetchall()
     base_user.commit()
 
-async def read_a_user(chat_id):
-    return cur_user.execute(f'SELECT * FROM users WHERE chat_id == {chat_id}').fetchall()
+async def read_a_user(message: types.Message):
+    user = cur_user.execute(f'SELECT * FROM users WHERE chat_id == {message.from_user.id}').fetchall()
+    if len(user) == 0:
+        chat_id       = message.from_user.id
+        username      = message.from_user.username
+        full_name     = message.from_user.full_name
+        phone_number  = '0'
+        is_admin      = message.from_user.username is not None and message.from_user.username in admins
+        language_code = message.from_user.language_code
+        receive_notifications = False
+
+        user = User(chat_id=chat_id, username=username, full_name=full_name, phone_number=phone_number, is_admin=is_admin, language_code=language_code, receive_notifications=receive_notifications)
+
+        await add_a_user(user)
+
+        return cur_user.execute(f'SELECT * FROM users WHERE chat_id == {message.from_user.id}').fetchall()
+    else:
+        return cur_user.execute(f'SELECT * FROM users WHERE chat_id == {message.from_user.id}').fetchall()
 
 async def read_admins():
     return cur_user.execute(f'SELECT * FROM users WHERE is_admin == 1').fetchall()
+
+async def read_users():
+    return cur_user.execute(f'SELECT * FROM users WHERE is_admin == 0').fetchall()
 
 async def update_language(chat_id, new_language):
     cur_user.execute(f'UPDATE users SET language_code = "{new_language}" WHERE chat_id == {chat_id}')

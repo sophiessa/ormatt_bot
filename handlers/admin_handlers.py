@@ -41,11 +41,7 @@ user
 #----------------------------------------------------------------------
 async def start_fsm(message: types.Message):
     user = await sqlite_db.read_a_user(message.from_user.id)
-    #CHANGE
-    if user == None or user == []:
-        await message.answer('/start', reply_markup=gkbs.start_button())
-        return
-    #CHANGE
+
     lang = message.from_user.language_code if user == None or user == [] else user[0][5]
     if int(user[0][4]):
         await FSMAdmin.name.set()
@@ -55,11 +51,7 @@ async def start_fsm(message: types.Message):
 
 async def set_name(message: types.Message, state: FSMContext):
     user = await sqlite_db.read_a_user(message.from_user.id)
-    #CHANGE
-    if user == None or user == []:
-        await message.answer('/start', reply_markup=gkbs.start_button())
-        return
-    #CHANGE
+
     lang = message.from_user.language_code if user == None or user == [] else user[0][5]
     if int(user[0][4]):
         async with state.proxy() as data: 
@@ -71,11 +63,7 @@ async def set_name(message: types.Message, state: FSMContext):
 
 async def set_photo(message: types.Message, state: FSMContext):
     user = await sqlite_db.read_a_user(message.from_user.id)
-    #CHANGE
-    if user == None or user == []:
-        await message.answer('/start', reply_markup=gkbs.start_button())
-        return
-    #CHANGE
+
     lang = message.from_user.language_code if user == None or user == [] else user[0][5]
     if int(user[0][4]):
         async with state.proxy() as data:
@@ -87,11 +75,7 @@ async def set_photo(message: types.Message, state: FSMContext):
 
 async def set_description(message: types.Message, state: FSMContext):
     user = await sqlite_db.read_a_user(message.from_user.id)
-    #CHANGE
-    if user == None or user == []:
-        await message.answer('/start', reply_markup=gkbs.start_button())
-        return
-    #CHANGE
+
     lang = message.from_user.language_code if user == None or user == [] else user[0][5]
     if int(user[0][4]):
         async with state.proxy() as data:
@@ -103,11 +87,7 @@ async def set_description(message: types.Message, state: FSMContext):
 
 async def set_price(message: types.Message, state: FSMContext):
     user = await sqlite_db.read_a_user(message.from_user.id)
-    #CHANGE
-    if user == None or user == []:
-        await message.answer('/start', reply_markup=gkbs.start_button())
-        return
-    #CHANGE
+
     lang = message.from_user.language_code if user == None or user == [] else user[0][5]
     if int(user[0][4]):
         async with state.proxy() as data:
@@ -119,11 +99,7 @@ async def set_price(message: types.Message, state: FSMContext):
 
 async def set_discount(message: types.Message, state: FSMContext):
     user = await sqlite_db.read_a_user(message.from_user.id)
-    #CHANGE
-    if user == None or user == []:
-        await message.answer('/start', reply_markup=gkbs.start_button())
-        return
-    #CHANGE
+
     lang = message.from_user.language_code if user == None or user == [] else user[0][5]
     if int(user[0][4]):
         async with state.proxy() as data:
@@ -135,11 +111,7 @@ async def set_discount(message: types.Message, state: FSMContext):
         
 async def set_categories(message: types.Message, state: FSMContext):
     user = await sqlite_db.read_a_user(message.from_user.id)
-    #CHANGE
-    if user == None or user == []:
-        await message.answer('/start', reply_markup=gkbs.start_button())
-        return
-    #CHANGE
+
     lang = message.from_user.language_code if user == None or user == [] else user[0][5]
     if int(user[0][4]):
         async with state.proxy() as data:
@@ -152,11 +124,7 @@ async def set_categories(message: types.Message, state: FSMContext):
 
 async def cancel_upload(message: types.Message, state: FSMContext):
     user = await sqlite_db.read_a_user(message.from_user.id)
-    #CHANGE
-    if user == None or user == []:
-        await message.answer('/start', reply_markup=gkbs.start_button())
-        return
-    #CHANGE
+
     lang = message.from_user.language_code if user == None or user == [] else user[0][5]
     if int(user[0][4]):
         curr_state = await state.get_state()
@@ -172,11 +140,7 @@ async def cancel_upload(message: types.Message, state: FSMContext):
 #Deleting routine
 async def delete_product(message: types.Message):
     user = await sqlite_db.read_a_user(message.from_user.id)
-    #CHANGE
-    if user == None or user == []:
-        await message.answer('/start', reply_markup=gkbs.start_button())
-        return
-    #CHANGE
+
     lang = message.from_user.language_code if user == None or user == [] else user[0][5]
     if int(user[0][4]):
         products = await sqlite_db.read_products_raw()
@@ -188,11 +152,7 @@ async def delete_product(message: types.Message):
 
 async def delete_callback_runner(callback_query: types.CallbackQuery):
     user = await sqlite_db.read_a_user(callback_query.from_user.id)
-    #CHANGE
-    if user == None or user == []:
-        await callback_query.message.answer('/start', reply_markup=gkbs.start_button())
-        return
-    #CHANGE
+
     lang = callback_query.from_user.language_code if user == None or user == [] else user[0][5]
     await sqlite_db.delete_a_product(callback_query.data.replace('Delete ', ''))
     text = ats.delete_product_callback(callback_query.data.replace('Delete ', ''), lang)
