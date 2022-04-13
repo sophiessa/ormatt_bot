@@ -125,6 +125,9 @@ async def update_receive_notifications(chat_id, new_receive):
     cur_user.execute(f'UPDATE users SET receive_notifications = "{new_receive}" WHERE chat_id == {chat_id}')
     base_user.commit()
 
+async def number_of_users():
+    return cur_user.execute(f'SELECT COUNT(chat_id) FROM users WHERE is_admin == 0').fetchall()
+
 
 #reviews.db
 async def add_a_review(state):

@@ -44,7 +44,7 @@ def change_language_inline_keyboard():
     return InlineKeyboardMarkup().add(InlineKeyboardButton('КЫР', callback_data='Alanguage_kg'), InlineKeyboardButton('РУС', callback_data='Alanguage_ru'), InlineKeyboardButton('ENG', callback_data='Alanguage_en'))
 
 def start_keyboard_markup(lang='ru'):
-    return ReplyKeyboardMarkup(resize_keyboard=True).add(upload_btn[lang], delete_btn[lang]).add(post_btn[lang]).add(change_language_btn[lang])
+    return ReplyKeyboardMarkup(resize_keyboard=True).add(upload_btn[lang], delete_btn[lang]).add(post_btn[lang]).add(change_language_btn[lang]).add(KeyboardButton('/stats'))
 
 def cancel_keyboard_markup(lang='ru'):
     return ReplyKeyboardMarkup(resize_keyboard=True).add(cancel_btn[lang])
