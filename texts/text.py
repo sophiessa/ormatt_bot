@@ -258,3 +258,16 @@ class AdminTexts():
         }[lang]
 
 
+    def set_post_title(lang='ru'):
+        return {
+            'ru': 'Заглавие',
+            'en': 'Title',
+            'kg': 'Аталышы',
+        }[lang]
+
+    def set_post_text(lang='ru'):
+        return {
+            'ru': 'Текст',
+            'en': 'Text',
+            'kg': 'Текст',
+        }[lang]

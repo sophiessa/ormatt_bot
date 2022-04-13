@@ -155,7 +155,7 @@ async def delete_product(message: types.Message):
             await bot.send_photo(user[0][0], photo_id, text, reply_markup=delete_product_inline_keyboard)
 
 async def delete_callback_runner(callback_query: types.CallbackQuery):
-    user = await sqlite_db.read_a_user(callback_query.message)
+    user = await sqlite_db.read_a_user(callback_query)
 
     lang = callback_query.from_user.language_code if user == None or user == [] else user[0][5]
     await sqlite_db.delete_a_product(callback_query.data.replace('Delete ', ''))
@@ -169,7 +169,9 @@ async def post_notification(message: types.Message):
     lang = message.from_user.language_code if user == None or user == [] else user[0][5]
     if int(user[0][4]):
         await FSMPost.title.set()
-        await message.answer('Title')
+        text = ats.set_post_title(lang)
+        cancel_post = akbs.cancel_keyboard_markup(lang)
+        await message.answer(text=text, reply_markup=cancel_post)
 
 async def set_title(message: types.Message, state: FSMContext):
     user = await sqlite_db.read_a_user(message)
@@ -179,7 +181,9 @@ async def set_title(message: types.Message, state: FSMContext):
         async with state.proxy() as data:
             data['title'] = message.text
         await FSMPost.next()
-        await message.answer('Text')
+        text = ats.set_post_text(lang)
+        cancel_post = akbs.cancel_keyboard_markup(lang)
+        await message.answer(text=text, reply_markup=cancel_post)
 
 async def set_text(message: types.Message, state: FSMContext):
     user = await sqlite_db.read_a_user(message)
@@ -189,10 +193,21 @@ async def set_text(message: types.Message, state: FSMContext):
         async with state.proxy() as data:
             for u in users:
                 await bot.send_message(chat_id=u[0], text=f"<b>{data['title']}</b>\n{message.text}")
-            
+    
+    cancel_post = akbs.cancel_keyboard_markup(lang)
     await state.finish()
-    await message.answer('DONE!')
+    await message.answer('\U00002705', reply_markup=cancel_post)
 
+async def cancel_post(message: types.Message, state: FSMContext):
+    curr_state = state.get_state()
+    if curr_state is None:
+        return
+    user = await sqlite_db.read_a_user(message)
+    lang = message.from_user.language_code if user == None or user == [] else user[0][5]
+    if int(user[0][4]):
+        state.finish()
+        await message.answer('\U00002716')
+#END POSTIMG FSM
 
 async def change_language(message: types.Message):
     change_language_inline_keyboard = akbs.change_language_inline_keyboard()
@@ -225,9 +240,12 @@ def register_admin_handlers(dp: Dispatcher):
     dp.register_message_handler(set_discount, state=FSMAdmin.discount)
     dp.register_message_handler(set_categories, state=FSMAdmin.categories)
 
+    dp.register_message_handler(cancel_post, Text(contains='\U0000274C'), state='*')
     dp.register_message_handler(post_notification, Text(contains='\U00002709'), state=None)
     dp.register_message_handler(set_title, state=FSMPost.title)
     dp.register_message_handler(set_text, state=FSMPost.text)
+
+
     dp.register_message_handler(change_language, Text(contains='\U00003297'))
     dp.register_callback_query_handler(change_language_callback, Text(startswith='Alanguage_'))
 

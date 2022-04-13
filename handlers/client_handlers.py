@@ -56,7 +56,7 @@ async def see_mattresses(message: types.Message):
 async def choose_category_callback(callback_query: types.CallbackQuery):
     category = callback_query.data.replace('category_', '')
     products = await sqlite_db.read_products_raw()
-    user = await sqlite_db.read_a_user(callback_query.message)
+    user = await sqlite_db.read_a_user(callback_query)
 
     lang = callback_query.from_user.language_code if user == None or user == [] else user[0][5]
     for product in products:
@@ -84,7 +84,7 @@ async def see_accessories(message: types.Message):
 
 #BUY PRODUCT FST START
 async def choose_product_callback(callback_query: types.CallbackQuery, state: FSMContext):
-    user = await sqlite_db.read_a_user(callback_query.message)
+    user = await sqlite_db.read_a_user(callback_query)
 
     lang = callback_query.from_user.language_code if user == None or user == [] else user[0][5]
     product_name = callback_query.data.replace('choose_', '')
@@ -100,7 +100,7 @@ async def choose_product_callback(callback_query: types.CallbackQuery, state: FS
     
 
 async def set_buyer_name(message: types.Message, state: FSMContext):
-    user = await sqlite_db.read_a_user(message.from_user.id)
+    user = await sqlite_db.read_a_user(message)
 
     lang = message.from_user.language_code if user == None or user == [] else user[0][5]
     text = cts.question_buyer_phone_number(lang)
@@ -244,7 +244,7 @@ async def receive_notifications(message: types.Message):
     await message.answer(text=text, reply_markup=receive_yes_no_keyboard)
 
 async def receive_notifications_callback(callback_query: types.CallbackQuery):
-    user = await sqlite_db.read_a_user(callback_query.message)
+    user = await sqlite_db.read_a_user(callback_query)
 
     lang = callback_query.from_user.language_code if user == None or user == [] else user[0][5]
     receive = callback_query.data.replace('receive_notifications_', '')
