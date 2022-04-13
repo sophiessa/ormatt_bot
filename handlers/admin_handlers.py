@@ -44,7 +44,7 @@ user
 #Start of the Finite State Machine
 #----------------------------------------------------------------------
 async def start_fsm(message: types.Message):
-    user = await sqlite_db.read_a_user(message.from_user.id)
+    user = await sqlite_db.read_a_user(message)
 
     lang = message.from_user.language_code if user == None or user == [] else user[0][5]
     if int(user[0][4]):
@@ -54,7 +54,7 @@ async def start_fsm(message: types.Message):
         await message.answer(text=text, reply_markup=cancel_keyboard)
 
 async def set_name(message: types.Message, state: FSMContext):
-    user = await sqlite_db.read_a_user(message.from_user.id)
+    user = await sqlite_db.read_a_user(message)
 
     lang = message.from_user.language_code if user == None or user == [] else user[0][5]
     if int(user[0][4]):
@@ -66,7 +66,7 @@ async def set_name(message: types.Message, state: FSMContext):
         await message.reply(text=text, reply_markup=cancel_keyboard)
 
 async def set_photo(message: types.Message, state: FSMContext):
-    user = await sqlite_db.read_a_user(message.from_user.id)
+    user = await sqlite_db.read_a_user(message)
 
     lang = message.from_user.language_code if user == None or user == [] else user[0][5]
     if int(user[0][4]):
@@ -78,7 +78,7 @@ async def set_photo(message: types.Message, state: FSMContext):
         await message.reply(text=text, reply_markup=cancel_keyboard)
 
 async def set_description(message: types.Message, state: FSMContext):
-    user = await sqlite_db.read_a_user(message.from_user.id)
+    user = await sqlite_db.read_a_user(message)
 
     lang = message.from_user.language_code if user == None or user == [] else user[0][5]
     if int(user[0][4]):
@@ -90,7 +90,7 @@ async def set_description(message: types.Message, state: FSMContext):
         await message.reply(text=text, reply_markup=cancel_keyboard)
 
 async def set_price(message: types.Message, state: FSMContext):
-    user = await sqlite_db.read_a_user(message.from_user.id)
+    user = await sqlite_db.read_a_user(message)
 
     lang = message.from_user.language_code if user == None or user == [] else user[0][5]
     if int(user[0][4]):
@@ -102,7 +102,7 @@ async def set_price(message: types.Message, state: FSMContext):
         await message.reply(text=text, reply_markup=cancel_keyboard)
 
 async def set_discount(message: types.Message, state: FSMContext):
-    user = await sqlite_db.read_a_user(message.from_user.id)
+    user = await sqlite_db.read_a_user(message)
 
     lang = message.from_user.language_code if user == None or user == [] else user[0][5]
     if int(user[0][4]):
@@ -114,7 +114,7 @@ async def set_discount(message: types.Message, state: FSMContext):
         await message.reply(text=text, reply_markup=cancel_keyboard)
         
 async def set_categories(message: types.Message, state: FSMContext):
-    user = await sqlite_db.read_a_user(message.from_user.id)
+    user = await sqlite_db.read_a_user(message)
 
     lang = message.from_user.language_code if user == None or user == [] else user[0][5]
     if int(user[0][4]):
@@ -127,7 +127,7 @@ async def set_categories(message: types.Message, state: FSMContext):
         await state.finish()
 
 async def cancel_upload(message: types.Message, state: FSMContext):
-    user = await sqlite_db.read_a_user(message.from_user.id)
+    user = await sqlite_db.read_a_user(message)
 
     lang = message.from_user.language_code if user == None or user == [] else user[0][5]
     if int(user[0][4]):
@@ -143,7 +143,7 @@ async def cancel_upload(message: types.Message, state: FSMContext):
 
 #Deleting routine
 async def delete_product(message: types.Message):
-    user = await sqlite_db.read_a_user(message.from_user.id)
+    user = await sqlite_db.read_a_user(message)
 
     lang = message.from_user.language_code if user == None or user == [] else user[0][5]
     if int(user[0][4]):
@@ -155,7 +155,7 @@ async def delete_product(message: types.Message):
             await bot.send_photo(user[0][0], photo_id, text, reply_markup=delete_product_inline_keyboard)
 
 async def delete_callback_runner(callback_query: types.CallbackQuery):
-    user = await sqlite_db.read_a_user(callback_query.from_user.id)
+    user = await sqlite_db.read_a_user(callback_query.message)
 
     lang = callback_query.from_user.language_code if user == None or user == [] else user[0][5]
     await sqlite_db.delete_a_product(callback_query.data.replace('Delete ', ''))

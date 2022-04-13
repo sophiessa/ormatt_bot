@@ -56,7 +56,7 @@ async def see_mattresses(message: types.Message):
 async def choose_category_callback(callback_query: types.CallbackQuery):
     category = callback_query.data.replace('category_', '')
     products = await sqlite_db.read_products_raw()
-    user = await sqlite_db.read_a_user(callback_query.from_user.id)
+    user = await sqlite_db.read_a_user(callback_query.message)
 
     lang = callback_query.from_user.language_code if user == None or user == [] else user[0][5]
     for product in products:
@@ -71,7 +71,7 @@ async def choose_category_callback(callback_query: types.CallbackQuery):
 async def see_accessories(message: types.Message):
     category = 'acs'
     products = await sqlite_db.read_products_raw()
-    user = await sqlite_db.read_a_user(message.from_user.id)
+    user = await sqlite_db.read_a_user(message)
 
     lang = message.from_user.language_code if user == None or user == [] else user[0][5]
     for product in products:
@@ -84,7 +84,7 @@ async def see_accessories(message: types.Message):
 
 #BUY PRODUCT FST START
 async def choose_product_callback(callback_query: types.CallbackQuery, state: FSMContext):
-    user = await sqlite_db.read_a_user(callback_query.from_user.id)
+    user = await sqlite_db.read_a_user(callback_query.message)
 
     lang = callback_query.from_user.language_code if user == None or user == [] else user[0][5]
     product_name = callback_query.data.replace('choose_', '')
@@ -114,7 +114,7 @@ async def set_buyer_name(message: types.Message, state: FSMContext):
     await message.answer(text=text, reply_markup=cancel_buy_keyboard)
 
 async def set_buyer_phone_number(message: types.Message, state: FSMContext):
-    user = await sqlite_db.read_a_user(message.from_user.id)
+    user = await sqlite_db.read_a_user(message)
 
     lang = message.from_user.language_code if user == None or user == [] else user[0][5]
 
@@ -135,7 +135,7 @@ async def set_buyer_phone_number(message: types.Message, state: FSMContext):
     await message.answer(text=text, reply_markup=start_keyboard)
 
 async def cancel_buy(message: types.Message, state: FSMContext):
-    user = await sqlite_db.read_a_user(message.from_user.id)
+    user = await sqlite_db.read_a_user(message)
 
     lang = message.from_user.language_code if user == None or user == [] else user[0][5]
     text = cts.cancel_buy(lang)
@@ -151,7 +151,7 @@ async def cancel_buy(message: types.Message, state: FSMContext):
 
 
 async def about_us(message: types.Message):
-    user = await sqlite_db.read_a_user(message.from_user.id)
+    user = await sqlite_db.read_a_user(message)
 
     lang = message.from_user.language_code if user == None or user == [] else user[0][5]
     text = cts.about_us(lang)
@@ -160,7 +160,7 @@ async def about_us(message: types.Message):
 
 
 async def our_social_media(message: types.Message):
-    user = await sqlite_db.read_a_user(message.from_user.id)
+    user = await sqlite_db.read_a_user(message)
 
     lang = message.from_user.language_code if user == None or user == [] else user[0][5]
     text = cts.social_media(lang)
@@ -169,7 +169,7 @@ async def our_social_media(message: types.Message):
 
 #'Leave a review' FSM beginning
 async def leave_a_review_start(message: types.Message):
-    user = await sqlite_db.read_a_user(message.from_user.id)
+    user = await sqlite_db.read_a_user(message)
 
     lang = message.from_user.language_code if user == None or user == [] else user[0][5]
     text = cts.review_question_name(lang)
@@ -178,7 +178,7 @@ async def leave_a_review_start(message: types.Message):
     await message.answer(text=text, reply_markup=cancel_keyboard)
 #set states one by one, skip (id, date)
 async def set_review_user(message: types.Message, state: FSMContext):
-    user = await sqlite_db.read_a_user(message.from_user.id)
+    user = await sqlite_db.read_a_user(message)
 
     lang = message.from_user.language_code if user == None or user == [] else user[0][5]
     text = cts.review_question_review(lang)
@@ -194,7 +194,7 @@ async def set_review_user(message: types.Message, state: FSMContext):
     await message.answer(text=text, reply_markup=cancel_keyboard)
 
 async def set_review_review(message: types.Message, state: FSMContext):
-    user = await sqlite_db.read_a_user(message.from_user.id)
+    user = await sqlite_db.read_a_user(message)
    
     lang = message.from_user.language_code if user == None or user == [] else user[0][5]
     text = cts.review_end(lang)
@@ -206,7 +206,7 @@ async def set_review_review(message: types.Message, state: FSMContext):
     await state.finish()
 #cancel review if needed
 async def cancel_review(message: types.Message, state: FSMContext):
-    user = await sqlite_db.read_a_user(message.from_user.id)
+    user = await sqlite_db.read_a_user(message)
 
     lang = message.from_user.language_code if user == None or user == [] else user[0][5]
     text = cts.review_cancel(lang)
@@ -236,7 +236,7 @@ async def change_language_callback(callback_query: types.CallbackQuery):
     await callback_query.answer()
 
 async def receive_notifications(message: types.Message):
-    user = await sqlite_db.read_a_user(message.from_user.id)
+    user = await sqlite_db.read_a_user(message)
 
     lang = message.from_user.language_code if user == None or user == [] else user[0][5]
     text = cts.receive_notifications(lang)
@@ -244,7 +244,7 @@ async def receive_notifications(message: types.Message):
     await message.answer(text=text, reply_markup=receive_yes_no_keyboard)
 
 async def receive_notifications_callback(callback_query: types.CallbackQuery):
-    user = await sqlite_db.read_a_user(callback_query.from_user.id)
+    user = await sqlite_db.read_a_user(callback_query.message)
 
     lang = callback_query.from_user.language_code if user == None or user == [] else user[0][5]
     receive = callback_query.data.replace('receive_notifications_', '')
